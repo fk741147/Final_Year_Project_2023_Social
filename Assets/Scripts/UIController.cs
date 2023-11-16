@@ -6,13 +6,18 @@ using UnityEngine.EventSystems;
 
 public class UIController : MonoBehaviour,IDragHandler
 {
-    public RectTransform leftPanel, rightPanel;
-    public float minRightPanelWidth = 50f;
-    public float minLeftPanelWidth = 50f;
+    public RectTransform leftPanel, rightPanel,mainPanel;
+    public float minRightPanelWidth ;
+    public float minLeftPanelWidth;
 
     // Start is called before the first frame update
     void Start()
     {
+        mainPanel = transform.parent.GetComponent<RectTransform>(); 
+        leftPanel.sizeDelta = new Vector2(mainPanel.sizeDelta.x/2, leftPanel.sizeDelta.y);
+        rightPanel.sizeDelta = new Vector2(mainPanel.sizeDelta.x / 2, rightPanel.sizeDelta.y);
+        minLeftPanelWidth = mainPanel.sizeDelta.x / 3;
+        minRightPanelWidth = mainPanel.sizeDelta.x / 3;
 
     }
 
@@ -29,18 +34,16 @@ public class UIController : MonoBehaviour,IDragHandler
         float leftPanelWidth = leftPanel.sizeDelta.x + widthDelta;
         float rightPanelWidth = rightPanel.sizeDelta.x - widthDelta;
 
-        float minRightPanelWidth = 50f;
-
 
         if (rightPanelWidth < minRightPanelWidth)
         {
             rightPanelWidth = minRightPanelWidth;
-            leftPanelWidth = transform.parent.GetComponent<RectTransform>().sizeDelta.x - rightPanelWidth;
+            leftPanelWidth = mainPanel.sizeDelta.x - rightPanelWidth;
         }
         if(leftPanelWidth< minLeftPanelWidth)
         {
             leftPanelWidth = minLeftPanelWidth;
-            rightPanelWidth= transform.parent.GetComponent<RectTransform>().sizeDelta.x-leftPanelWidth;
+            rightPanelWidth= mainPanel.sizeDelta.x-leftPanelWidth;
         }
 
         float totalWidth = leftPanelWidth + rightPanelWidth;
